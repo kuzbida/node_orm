@@ -1,7 +1,8 @@
 var Sequelize = require('sequelize'),
     mysql = require('mysql'),
     express = require('express'),
-    app = express();
+    app = express(),
+    port = process.env.PORT || 3333;
 
 var sequelize = new Sequelize('TrainingDay', 'root', 'password', {
     host: '127.0.0.1',
@@ -24,9 +25,22 @@ sequelize
     });
 
 
+console.log('Its env_____', process.env.ENV);
+
+app.use(function(req, res, next) { //allow cross origin requests
+    res.setHeader("Access-Control-Allow-Methods", "POST, PUT, OPTIONS, DELETE, GET");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 
 var User = require('./models/UserModel')(sequelize);
 var Exercise = require('./models/ExerciseModel')(sequelize);
+
+app.listen(port, function(){
+    console.log('Api is alive on port '+ port)
+});
 
 
 // var ExerciseType = sequelize.define('exerciseType', {
